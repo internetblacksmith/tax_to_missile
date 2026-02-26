@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YOUR TAX DOLLARS AT WORK</title>
+<meta name="description" content="Calculate what your lifetime federal taxes bought in military equipment. Spoiler: it's depressing.">
+<meta property="og:title" content="YOUR TAX DOLLARS AT WORK">
+<meta property="og:description" content="I calculated what my lifetime taxes bought in military equipment. The results are... illuminating.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="YOUR TAX DOLLARS AT WORK">
+<meta name="twitter:description" content="Calculate what your lifetime federal taxes bought in military equipment.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --bg-elevated: #141414;
+  --bg-card: #1a1a1a;
+  --olive: #4a5d23;
+  --olive-dim: #3a4a1c;
+  --red: #c0392b;
+  --red-bright: #e74c3c;
+  --amber: #d4a017;
+  --amber-dim: #b8860b;
+  --text: #e8e6e3;
+  --text-dim: #8a8784;
+  --text-muted: #5a5856;
+  --border: #2a2a2a;
+  --font-stencil: 'Black Ops One', cursive;
+  --font-mono: 'Source Code Pro', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Flag watermark */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 40px,
+    rgba(74, 93, 35, 0.02) 40px,
+    rgba(74, 93, 35, 0.02) 80px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding: 40px 20px;
+}
+
+.hero::after {
+  content: 'CLASSIFIED';
+  position: absolute;
+  top: 60px;
+  right: -20px;
+  font-family: var(--font-stencil);
+  font-size: 14px;
+  color: var(--red);
+  opacity: 0.15;
+  transform: rotate(12deg);
+  border: 2px solid var(--red);
+  padding: 4px 16px;
+  letter-spacing: 4px;
+}
+
+.hero h1 {
+  font-family: var(--font-stencil);
+  font-size: clamp(2.2rem, 7vw, 4.5rem);
+  color: var(--text);
+  letter-spacing: 3px;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  text-shadow: 2px 2px 0 rgba(74, 93, 35, 0.3);
+}
+
+.hero h1 span {
+  display: block;
+  color: var(--red);
+  font-size: 0.6em;
+  letter-spacing: 6px;
+  margin-top: 8px;
+}
+
+.hero-sub {
+  font-size: 15px;
+  color: var(--text-dim);
+  max-width: 550px;
+  margin-bottom: 40px;
+}
+
+.scroll-cue {
+  position: absolute;
+  bottom: 30px;
+  animation: bounce 2s ease infinite;
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.scroll-cue::after {
+  content: '▼';
+  display: block;
+  text-align: center;
+  margin-top: 4px;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+/* ─── FORM ─── */
+.form-section {
+  padding: 80px 0;
+}
+
+.form-wrapper {
+  background: var(--bg-elevated);
+  border: 1px dashed var(--border);
+  padding: 40px 32px;
+  position: relative;
+}
+
+.form-wrapper::before {
+  content: 'FORM 1040-M  //  DEPT. OF SATIRICAL REVENUE';
+  display: block;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.stamp {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  font-family: var(--font-stencil);
+  font-size: 11px;
+  color: var(--red);
+  opacity: 0.25;
+  border: 2px solid var(--red);
+  padding: 3px 12px;
+  transform: rotate(6deg);
+  letter-spacing: 3px;
+}
+
+.form-group {
+  margin-bottom: 28px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--olive);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.form-group input[type="number"],
+.form-group select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 18px;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--olive);
+}
+
+.form-group input::placeholder { color: var(--text-muted); }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.slider-wrapper {
+  position: relative;
+}
+
+.slider-value {
+  position: absolute;
+  right: 0;
+  top: -2px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--amber);
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  outline: none;
+  margin-top: 12px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  background: var(--olive);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--text);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  background: var(--olive);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--text);
+}
+
+/* Launch button */
+.launch-wrapper {
+  margin-top: 36px;
+  text-align: center;
+}
+
+.launch-btn {
+  position: relative;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  font-family: var(--font-stencil);
+  font-size: 16px;
+  letter-spacing: 2px;
+  padding: 18px 48px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.launch-btn:hover {
+  background: var(--red-bright);
+  transform: scale(1.02);
+  box-shadow: 0 0 30px rgba(192, 57, 43, 0.3);
+}
+
+.launch-btn:active {
+  transform: scale(0.98);
+}
+
+.launch-btn::before {
+  content: '◆ ';
+}
+
+.launch-btn::after {
+  content: ' ◆';
+}
+
+.launch-cover {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+/* ─── RESULTS ─── */
+.results-section {
+  display: none;
+  padding: 0 0 80px;
+}
+
+.results-section.visible {
+  display: block;
+  animation: fadeUp 0.6s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Summary cards */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.summary-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 24px;
+}
+
+.summary-card .label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.summary-card .value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--amber);
+}
+
+.summary-card .value.red { color: var(--red); }
+.summary-card .value.olive { color: var(--olive); }
+
+.summary-card .note {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+
+/* Methodology toggles */
+.method-toggle {
+  display: flex;
+  gap: 0;
+  margin-bottom: 32px;
+  border: 1px solid var(--border);
+  width: fit-content;
+}
+
+.method-btn {
+  background: var(--bg-card);
+  border: none;
+  border-right: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.method-btn:last-child { border-right: none; }
+
+.method-btn.active {
+  background: var(--olive-dim);
+  color: var(--text);
+}
+
+.method-btn:hover:not(.active) {
+  background: var(--bg-elevated);
+}
+
+.method-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+/* Shopping cart */
+.section-title {
+  font-family: var(--font-stencil);
+  font-size: 20px;
+  color: var(--text);
+  margin-bottom: 6px;
+  letter-spacing: 2px;
+}
+
+.section-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+}
+
+.cart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 48px;
+}
+
+.cart-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 16px;
+  opacity: 0;
+  animation: cardIn 0.4s ease forwards;
+}
+
+.cart-item .item-count {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--amber);
+  line-height: 1;
+}
+
+.cart-item .item-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 6px 0 4px;
+}
+
+.cart-item .item-cost {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.cart-item .item-quip {
+  font-size: 11px;
+  color: var(--olive);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Progress bar of despair */
+.despair-section {
+  margin-bottom: 48px;
+}
+
+.progress-track {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  height: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--olive-dim), var(--olive));
+  width: 0;
+  transition: width 1.5s ease;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 8px,
+    rgba(255,255,255,0.03) 8px,
+    rgba(255,255,255,0.03) 16px
+  );
+}
+
+.progress-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.despair-quip {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* Receipt */
+.receipt {
+  background: #f5f0e8;
+  color: #1a1a1a;
+  font-family: var(--font-mono);
+  padding: 32px 28px;
+  max-width: 460px;
+  margin: 0 auto 48px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.receipt::before,
+.receipt::after {
+  content: '';
+  display: block;
+  height: 16px;
+  background: linear-gradient(135deg, transparent 33.33%, #f5f0e8 33.33%, #f5f0e8 66.66%, transparent 66.66%),
+              linear-gradient(225deg, transparent 33.33%, #f5f0e8 33.33%, #f5f0e8 66.66%, transparent 66.66%);
+  background-size: 16px 16px;
+  position: absolute;
+  left: 0; right: 0;
+}
+
+.receipt::before { top: -16px; }
+.receipt::after { bottom: -16px; }
+
+.receipt-header {
+  text-align: center;
+  border-bottom: 1px dashed #888;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.receipt-header h3 {
+  font-family: var(--font-stencil);
+  font-size: 15px;
+  letter-spacing: 3px;
+}
+
+.receipt-header p {
+  font-size: 10px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.receipt-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 3px 0;
+}
+
+.receipt-line.indent { padding-left: 16px; color: #555; }
+.receipt-line.total {
+  border-top: 1px dashed #888;
+  margin-top: 8px;
+  padding-top: 8px;
+  font-weight: 700;
+  font-size: 14px;
+}
+.receipt-line.subtotal {
+  border-top: 1px dashed #ccc;
+  margin-top: 6px;
+  padding-top: 6px;
+  font-weight: 600;
+}
+
+.receipt-divider {
+  border: none;
+  border-top: 1px dashed #888;
+  margin: 12px 0;
+}
+
+.receipt-footer {
+  text-align: center;
+  font-size: 10px;
+  color: #888;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed #888;
+}
+
+/* Civilian comparison */
+.civilian-section {
+  margin-bottom: 48px;
+}
+
+.civilian-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.civilian-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 16px;
+}
+
+.civilian-item .civ-count {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--amber);
+}
+
+.civilian-item .civ-label {
+  font-size: 13px;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+.civilian-item .civ-note {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* Share */
+.share-section {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.share-btn {
+  background: var(--olive-dim);
+  color: var(--text);
+  border: 1px solid var(--olive);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 14px 32px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+
+.share-btn:hover {
+  background: var(--olive);
+}
+
+.share-toast {
+  display: none;
+  font-size: 12px;
+  color: var(--olive);
+  margin-top: 10px;
+}
+
+.share-toast.visible {
+  display: block;
+  animation: fadeUp 0.3s ease;
+}
+
+/* Footer */
+footer {
+  border-top: 1px dashed var(--border);
+  padding: 32px 0;
+  text-align: center;
+}
+
+.disclaimer {
+  font-size: 11px;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.disclaimer strong {
+  color: var(--red);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr; }
+  .form-wrapper { padding: 28px 20px; }
+  .summary-grid { grid-template-columns: 1fr; }
+  .cart-grid { grid-template-columns: 1fr 1fr; }
+  .receipt { padding: 24px 18px; }
+  .method-toggle { flex-wrap: wrap; }
+  .method-btn { flex: 1; min-width: 90px; text-align: center; }
+  .launch-btn { font-size: 14px; padding: 16px 28px; }
+}
+
+/* Sources page */
+.sources-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 100;
+  overflow-y: auto;
+  padding: 40px 20px;
+}
+
+.sources-overlay.visible { display: block; }
+
+.sources-panel {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--bg-elevated);
+  border: 1px dashed var(--border);
+  padding: 40px 32px;
+  position: relative;
+}
+
+.sources-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 6px 14px;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.sources-close:hover { color: var(--text); border-color: var(--text-dim); }
+
+.sources-panel h2 {
+  font-family: var(--font-stencil);
+  font-size: 22px;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.sources-panel .sources-intro {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 32px;
+  line-height: 1.7;
+}
+
+.source-category {
+  margin-bottom: 32px;
+}
+
+.source-category h3 {
+  font-family: var(--font-stencil);
+  font-size: 14px;
+  color: var(--olive);
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.source-item {
+  margin-bottom: 16px;
+  padding-left: 16px;
+  border-left: 2px solid var(--border);
+}
+
+.source-item .src-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.source-item .src-price {
+  font-size: 12px;
+  color: var(--amber);
+  margin-top: 2px;
+}
+
+.source-item .src-note {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+.source-item .src-link {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--olive);
+  margin-top: 4px;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.source-item .src-link:hover { text-decoration: underline; }
+
+.sources-footer-link {
+  color: var(--olive);
+  cursor: pointer;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.sources-footer-link:hover { color: var(--text); }
+
+/* Utility */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <h1>
+    YOUR TAX DOLLARS
+    <span>AT WORK</span>
+  </h1>
+  <p class="hero-sub">
+    Find out what your lifetime of federal taxes actually bought.
+    Spoiler: it's not roads and schools.
+  </p>
+  <a href="#intake" class="scroll-cue">begin intake</a>
+</section>
+
+<!-- ═══ FORM ═══ -->
+<section class="form-section" id="intake">
+  <div class="container">
+    <div class="form-wrapper">
+      <div class="stamp">TOP SECRET</div>
+
+      <div class="form-group">
+        <label for="salary">Annual Gross Salary (USD)</label>
+        <input type="number" id="salary" placeholder="75000" min="0" max="100000000" step="1000" aria-label="Annual salary">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="filing">Filing Status</label>
+          <select id="filing" aria-label="Filing status">
+            <option value="single">Single</option>
+            <option value="married_joint">Married Filing Jointly</option>
+            <option value="married_separate">Married Filing Separately</option>
+            <option value="head_household">Head of Household</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="years">Years Worked</label>
+          <div class="slider-wrapper">
+            <span class="slider-value" id="years-display">30</span>
+            <input type="range" id="years" min="1" max="50" value="30" aria-label="Years worked">
+          </div>
+        </div>
+      </div>
+
+      <div class="launch-wrapper">
+        <button class="launch-btn" id="calculate-btn">Calculate Your Contribution</button>
+        <span class="launch-cover">[ lift safety cover to fire ]</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RESULTS ═══ -->
+<section class="results-section" id="results">
+  <div class="container">
+
+    <!-- Summary -->
+    <div class="summary-grid" id="summary-grid"></div>
+
+    <!-- Methodology toggle -->
+    <div class="method-label">Defense spending methodology</div>
+    <div class="method-toggle" id="method-toggle">
+      <button class="method-btn" data-rate="0.13">13% — Budget Share</button>
+      <button class="method-btn active" data-rate="0.25">25% — Income Tax</button>
+      <button class="method-btn" data-rate="0.52">52% — Discretionary</button>
+    </div>
+
+    <!-- Shopping Cart -->
+    <h2 class="section-title">YOUR SHOPPING CART</h2>
+    <p class="section-sub">Items purchased with your defense tax contribution (greedy allocation)</p>
+    <div class="cart-grid" id="cart-grid"></div>
+
+    <!-- Progress Bar of Despair -->
+    <div class="despair-section">
+      <h2 class="section-title">PROGRESS BAR OF DESPAIR</h2>
+      <p class="section-sub" id="despair-sub"></p>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+        <span class="progress-label" id="progress-label"></span>
+      </div>
+      <p class="despair-quip" id="despair-quip"></p>
+    </div>
+
+    <!-- Receipt -->
+    <h2 class="section-title" style="text-align:center">YOUR RECEIPT</h2>
+    <p class="section-sub" style="text-align:center">Keep for your records. Or don't. Nobody asked you.</p>
+    <div class="receipt" id="receipt"></div>
+
+    <!-- Civilian Comparison -->
+    <div class="civilian-section">
+      <h2 class="section-title">WHAT ELSE THAT MONEY COULD BUY</h2>
+      <p class="section-sub">The road not taken (literally — we didn't fund that road either)</p>
+      <div class="civilian-grid" id="civilian-grid"></div>
+    </div>
+
+    <!-- Share -->
+    <div class="share-section">
+      <button class="share-btn" id="share-btn">SHARE YOUR CONTRIBUTION WITH THE WORLD</button>
+      <p class="share-toast" id="share-toast">Copied to clipboard. Spread the joy.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ SOURCES OVERLAY ═══ -->
+<div class="sources-overlay" id="sources-overlay">
+  <div class="sources-panel">
+    <button class="sources-close" id="sources-close">CLOSE [ESC]</button>
+    <h2>SOURCES & METHODOLOGY</h2>
+    <p class="sources-intro">
+      All figures are based on publicly available data from government agencies, Congressional reports, and reputable defense journalism.
+      Prices reflect approximate unit costs and may vary by contract, configuration, and fiscal year.
+      This is satire — but the numbers are real.
+    </p>
+
+    <div class="source-category">
+      <h3>TAX BRACKETS</h3>
+      <div class="source-item">
+        <div class="src-name">2025 Federal Income Tax Brackets & Standard Deductions</div>
+        <div class="src-note">All four filing statuses (Single, Married Filing Jointly, Married Filing Separately, Head of Household) with standard deductions. Based on IRS Revenue Procedure 2024-40, which sets the inflation-adjusted figures for tax year 2025.</div>
+        <a class="src-link" href="https://www.irs.gov/filing/federal-income-tax-rates-and-brackets" target="_blank" rel="noopener">IRS — Federal Income Tax Rates and Brackets</a><br>
+        <a class="src-link" href="https://www.irs.gov/pub/irs-drop/rp-24-40.pdf" target="_blank" rel="noopener">IRS Revenue Procedure 2024-40 (PDF)</a>
+      </div>
+    </div>
+
+    <div class="source-category">
+      <h3>DEFENSE SPENDING RATES</h3>
+      <div class="source-item">
+        <div class="src-name">13% — Share of Total Federal Budget</div>
+        <div class="src-note">Defense spending as a percentage of total federal outlays (~$6.1T in FY2024). This is the lowest estimate because it includes mandatory spending (Social Security, Medicare) in the denominator.</div>
+        <a class="src-link" href="https://www.cbo.gov/topics/budget" target="_blank" rel="noopener">Congressional Budget Office — Budget Topics</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">25% — Income Tax Allocation</div>
+        <div class="src-note">Methodology that allocates spending proportionally to revenue source. Since income taxes fund ~50% of the federal budget and defense is ~50% of that allocation, approximately 25% of your income tax goes to defense. This is our default.</div>
+        <a class="src-link" href="https://www.nationalpriorities.org/budget-basics/federal-budget-101/spending/" target="_blank" rel="noopener">National Priorities Project — Federal Spending</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">52% — Share of Discretionary Spending</div>
+        <div class="src-note">Defense spending as a percentage of federal discretionary spending only (excluding mandatory programs like Social Security and Medicare). This is the highest estimate.</div>
+        <a class="src-link" href="https://www.nationalpriorities.org/budget-basics/federal-budget-101/spending/" target="_blank" rel="noopener">National Priorities Project — Discretionary Spending</a>
+      </div>
+    </div>
+
+    <div class="source-category">
+      <h3>MILITARY EQUIPMENT — BIG TICKET</h3>
+      <div class="source-item">
+        <div class="src-name">Gerald R. Ford Aircraft Carrier (CVN-78)</div>
+        <div class="src-price">$13.3 billion</div>
+        <div class="src-note">Total procurement cost per Navy FY2026 budget submission (~$13.2B). Most expensive warship ever built. Experienced significant cost growth from initial $10.5B estimate.</div>
+        <a class="src-link" href="https://www.congress.gov/crs-product/RS20643" target="_blank" rel="noopener">CRS Report RS20643 — Navy Ford (CVN-78) Class Aircraft Carrier Program</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">Virginia-class Submarine (Block V)</div>
+        <div class="src-price">$4.5 billion</div>
+        <div class="src-note">Block V submarines with Virginia Payload Module. FY2025 budget requested $5.76B for one boat (includes advance procurement). At the standard two-per-year rate, cost is ~$4.5B each.</div>
+        <a class="src-link" href="https://www.congress.gov/crs-product/RL32418" target="_blank" rel="noopener">CRS Report RL32418 — Navy Virginia-Class Submarine Program</a><br>
+        <a class="src-link" href="https://news.usni.org/2024/09/04/white-house-wants-an-extra-2b-for-fy24-virginia-class-subs-attack-boats-pair-cost-11-3b" target="_blank" rel="noopener">USNI News — Virginia-Class Sub Costs</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">Arleigh Burke Destroyer (DDG-51 Flight III)</div>
+        <div class="src-price">$2.5 billion</div>
+        <div class="src-note">Current Flight III destroyers with AN/SPY-6 radar cost ~$2.5–2.7B each. FY2026 budget requests two at a combined ~$5.4B.</div>
+        <a class="src-link" href="https://www.congress.gov/crs-product/RL32109" target="_blank" rel="noopener">CRS Report RL32109 — Navy DDG-51 and DDG-1000 Programs</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">B-2 Spirit Stealth Bomber</div>
+        <div class="src-price">$2.0 billion (program cost per unit)</div>
+        <div class="src-note">Total program cost (~$44.75B in 1997 dollars) divided by 21 aircraft built = ~$2.13B per unit. Manufacturing cost alone was ~$737M per aircraft. Only 20 remain operational.</div>
+        <a class="src-link" href="https://www.af.mil/About-Us/Fact-Sheets/Display/Article/104482/b-2-spirit/" target="_blank" rel="noopener">USAF Fact Sheet — B-2 Spirit</a>
+      </div>
+    </div>
+
+    <div class="source-category">
+      <h3>MILITARY EQUIPMENT — AIRCRAFT</h3>
+      <div class="source-item">
+        <div class="src-name">F-35A Lightning II</div>
+        <div class="src-price">$82.5 million (airframe, excluding engine)</div>
+        <div class="src-note">Unit Recurring Flyaway Cost for Lots 18-19 (~$82.4M). Does NOT include the F135 engine (~$20.4M) or other government-furnished equipment. With engine, all-in flyaway cost is ~$103M.</div>
+        <a class="src-link" href="https://www.airandspaceforces.com/f-35-lots-18-and-19-contract/" target="_blank" rel="noopener">Air & Space Forces Magazine — F-35 Lots 18/19 Deal</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">AH-64E Apache Guardian</div>
+        <div class="src-price">$52 million (fully equipped)</div>
+        <div class="src-note">Base flyaway cost is ~$35-36M. Fully equipped with enhanced armor, upgraded weapons, and advanced systems: ~$50M+. U.S. Army awarded Boeing $4.685B for new-build AH-64Es in Nov 2025.</div>
+        <a class="src-link" href="https://en.wikipedia.org/wiki/Boeing_AH-64_Apache" target="_blank" rel="noopener">Wikipedia — Boeing AH-64 Apache (with cited DOD sources)</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">MQ-9 Reaper Drone</div>
+        <div class="src-price">$32 million (full system)</div>
+        <div class="src-note">Airframe alone: ~$16-17M. Full system (aircraft + ground control station + sensors + satellite link): ~$30-32M per USAF fact sheet.</div>
+        <a class="src-link" href="https://www.af.mil/About-Us/Fact-Sheets/Display/Article/104470/mq-9-reaper/" target="_blank" rel="noopener">USAF Fact Sheet — MQ-9 Reaper</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">UH-60M Black Hawk</div>
+        <div class="src-price">$21 million</div>
+        <div class="src-note">Flyaway cost ranges ~$21-25M depending on configuration. Dec 2025 Army contract: $433M for 24 helicopters (~$18M/unit in bulk).</div>
+        <a class="src-link" href="https://en.wikipedia.org/wiki/Sikorsky_UH-60_Black_Hawk" target="_blank" rel="noopener">Wikipedia — Sikorsky UH-60 Black Hawk (with cited DOD sources)</a>
+      </div>
+    </div>
+
+    <div class="source-category">
+      <h3>MILITARY EQUIPMENT — GROUND & MISSILES</h3>
+      <div class="source-item">
+        <div class="src-name">M1A2 SEPv3 Abrams Tank</div>
+        <div class="src-price">$8 million</div>
+        <div class="src-note">Unit cost varies by context: $6-10M depending on configuration. CBO amortized acquisition cost puts it at ~$8-9M for a fully equipped M1A2 SEPv3.</div>
+        <a class="src-link" href="https://www.congress.gov/crs-product/IF12495" target="_blank" rel="noopener">CRS In Focus IF12495 — The Army's M1 Abrams Tank Program</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">Patriot PAC-3 MSE Missile</div>
+        <div class="src-price">$4.1 million</div>
+        <div class="src-note">PAC-3 MSE interceptor: ~$4.0-4.2M per unit per Army budget documents. Older PAC-3 variant: ~$3.73M.</div>
+        <a class="src-link" href="https://www.missiledefenseadvocacy.org/missile-defense-systems-2/missile-defense-systems/missile-interceptors-by-cost/" target="_blank" rel="noopener">Missile Defense Advocacy Alliance — Interceptors by Cost</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">Tomahawk Cruise Missile (Block V)</div>
+        <div class="src-price">$1.9 million</div>
+        <div class="src-note">Current Block V production: ~$1.75-2.0M per missile. Recent large orders brought per-unit cost to ~$1.75M. Historically ~$2.2M; current production is cheaper.</div>
+        <a class="src-link" href="https://en.defence-ua.com/industries/us_orders_additional_tomahawk_cruise_missiles_even_cheaper_due_to_large_order-16960.html" target="_blank" rel="noopener">Defense Express — Tomahawk Production Costs</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">FIM-92 Stinger Missile</div>
+        <div class="src-price">$400,000</div>
+        <div class="src-note">New-production costs are significantly higher than historical ($38-120K). Current new-production unit cost estimated at ~$400-500K based on recent European procurement contracts.</div>
+        <a class="src-link" href="https://en.wikipedia.org/wiki/FIM-92_Stinger" target="_blank" rel="noopener">Wikipedia — FIM-92 Stinger (with cited procurement data)</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">FGM-148 Javelin Missile</div>
+        <div class="src-price">$240,000 (complete system: missile + CLU)</div>
+        <div class="src-note">The expendable missile round: ~$175-178K. The reusable Command Launch Unit (CLU): ~$125-150K. Our figure reflects the total system cost; the CLU is reused across many rounds.</div>
+        <a class="src-link" href="https://missilethreat.csis.org/missile/fgm-148-javelin/" target="_blank" rel="noopener">CSIS Missile Threat — FGM-148 Javelin</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">HMMWV (Humvee)</div>
+        <div class="src-price">$220,000 (up-armored)</div>
+        <div class="src-note">Original unarmored: ~$70K. Up-armored variants: ~$160-220K. Being replaced by the Joint Light Tactical Vehicle (JLTV) at ~$340K/unit.</div>
+        <a class="src-link" href="https://en.wikipedia.org/wiki/Humvee" target="_blank" rel="noopener">Wikipedia — Humvee (with cited DOD sources)</a>
+      </div>
+    </div>
+
+    <div class="source-category">
+      <h3>MILITARY EQUIPMENT — SMALL ITEMS</h3>
+      <div class="source-item">
+        <div class="src-name">Air Force Coffee Maker</div>
+        <div class="src-price">$7,600</div>
+        <div class="src-note">10-cup aircraft coffee maker reported by airmen at Travis Air Force Base, 1984. Separate from the 2018 controversy over $1,280 heated coffee cups on C-5/KC-10 aircraft.</div>
+        <a class="src-link" href="https://www.airforcetimes.com/news/your-air-force/2018/10/23/air-force-puts-the-kibosh-on-the-1300-coffee-cup/" target="_blank" rel="noopener">Air Force Times — The $1,300 Coffee Cup (2018)</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">Military Toilet Seat (C-5 Aircraft)</div>
+        <div class="src-price">$640</div>
+        <div class="src-note">One-piece molded plastic toilet cover for a C-5 aircraft lavatory, discovered during 1980s procurement scandals. By 2018, Sen. Grassley found the Air Force was paying $10,000 for a similar part.</div>
+        <a class="src-link" href="https://www.grassley.senate.gov/news/news-releases/grassley-10000-toilet-seat-cover-doesnt-pass-smell-test-dod-flushing-taxpayer" target="_blank" rel="noopener">Sen. Grassley — $10,000 Toilet Seat Cover (2018)</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">Pentagon Hammer</div>
+        <div class="src-price">$435</div>
+        <div class="src-note">Appeared on a unit-price list for the T-34C trainer in 1983. The hammer itself was ~$15; the remaining $420 was overhead allocated equally across all spare parts. Sometimes misquoted as "$600" (that's the toilet seat).</div>
+        <a class="src-link" href="https://www.govexec.com/federal-news/1998/12/the-myth-of-the-600-hammer/5271/" target="_blank" rel="noopener">Government Executive — "The Myth of the $600 Hammer"</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">MRE (Meal, Ready-to-Eat)</div>
+        <div class="src-price">$12.50</div>
+        <div class="src-note">Defense Logistics Agency FY2025 pricing: case of 12 MREs at ~$150, or ~$12.53 per meal.</div>
+        <a class="src-link" href="https://www.mreinfo.com/mres/buying-mres/" target="_blank" rel="noopener">MRE Info — Buying MREs (cites DLA pricing)</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">5.56 NATO Round</div>
+        <div class="src-price">$0.45</div>
+        <div class="src-note">Government procurement average: ~$0.49/round across all 5.56mm types. The M855A1 Enhanced Performance Round costs ~$0.68/round. Our figure reflects bulk contract pricing.</div>
+        <a class="src-link" href="https://www.asafm.army.mil/Portals/72/Documents/BudgetMaterial/2025/Base%20Budget/Procurement/Procurement-of-Ammunition-Army.pdf" target="_blank" rel="noopener">U.S. Army FY2025 Ammunition Budget Justification (PDF)</a>
+      </div>
+    </div>
+
+    <div class="source-category">
+      <h3>CIVILIAN COMPARISONS</h3>
+      <div class="source-item">
+        <div class="src-name">Average Teacher Salary</div>
+        <div class="src-price">$65,000/year (BLS median)</div>
+        <div class="src-note">BLS median: ~$63,100. NEA national average (mean): ~$74,177 for 2024-25. We use a figure between the two.</div>
+        <a class="src-link" href="https://www.nea.org/resource-library/educator-pay-and-student-spending-how-does-your-state-rank" target="_blank" rel="noopener">NEA — Educator Pay Data 2025</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">4-Year College Tuition</div>
+        <div class="src-price">$100,000 (total cost of attendance)</div>
+        <div class="src-note">Public 4-year in-state total cost (tuition + room & board): ~$24,920/year or ~$99,680 over 4 years. Tuition-only is ~$46,440 over 4 years.</div>
+        <a class="src-link" href="https://research.collegeboard.org/trends/college-pricing/highlights" target="_blank" rel="noopener">College Board — Trends in College Pricing</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">Annual Healthcare Per Capita</div>
+        <div class="src-price">$15,500</div>
+        <div class="src-note">U.S. healthcare spending reached $15,474 per capita in 2024 (total NHE: $5.3T), growing 7.2% year-over-year. Projected ~$16,570 for 2025.</div>
+        <a class="src-link" href="https://www.cms.gov/data-research/statistics-trends-and-reports/national-health-expenditure-data/nhe-fact-sheet" target="_blank" rel="noopener">CMS — National Health Expenditure Fact Sheet</a>
+      </div>
+      <div class="source-item">
+        <div class="src-name">Median US Home Price</div>
+        <div class="src-price">$420,000</div>
+        <div class="src-note">National median existing-home price hovered $400-415K through 2025. Our figure is slightly above the median but within a reasonable margin for late 2025.</div>
+        <a class="src-link" href="https://fred.stlouisfed.org/series/MSPUS" target="_blank" rel="noopener">FRED — Median Sales Price of Houses Sold</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <p class="disclaimer">
+      <strong>DISCLAIMER:</strong> This is satire, not tax advice. Numbers are approximate using 2025 federal brackets
+      and publicly available defense procurement costs. Your actual tax situation depends on deductions, credits,
+      state taxes, and how many times you've cried while filing. Consult a real CPA, not a website with a launch button.
+      <br><br>
+      <button class="sources-footer-link" id="open-sources">View all sources and methodology</button>
+    </p>
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+
+const TAX_DATA = {
+  single: {
+    deduction: 15000,
+    brackets: [
+      [11925, 0.10],
+      [48475, 0.12],
+      [103350, 0.22],
+      [197300, 0.24],
+      [250525, 0.32],
+      [626350, 0.35],
+      [Infinity, 0.37]
+    ]
+  },
+  married_joint: {
+    deduction: 30000,
+    brackets: [
+      [23850, 0.10],
+      [96950, 0.12],
+      [206700, 0.22],
+      [394600, 0.24],
+      [501050, 0.32],
+      [751600, 0.35],
+      [Infinity, 0.37]
+    ]
+  },
+  married_separate: {
+    deduction: 15000,
+    brackets: [
+      [11925, 0.10],
+      [48475, 0.12],
+      [103350, 0.22],
+      [197300, 0.24],
+      [250525, 0.32],
+      [375800, 0.35],
+      [Infinity, 0.37]
+    ]
+  },
+  head_household: {
+    deduction: 22500,
+    brackets: [
+      [17000, 0.10],
+      [64850, 0.12],
+      [103350, 0.22],
+      [197300, 0.24],
+      [250500, 0.32],
+      [626350, 0.35],
+      [Infinity, 0.37]
+    ]
+  }
+};
+
+const MILITARY_ITEMS = [
+  { name: 'Gerald R. Ford Aircraft Carrier', cost: 13300000000, quip: 'Costs more than the GDP of 40 countries' },
+  { name: 'Virginia-class Submarine', cost: 4500000000, quip: 'Lurking beneath the ocean, like your retirement savings' },
+  { name: 'Arleigh Burke Destroyer', cost: 2500000000, quip: 'At least it floats. Probably.' },
+  { name: 'B-2 Stealth Bomber', cost: 2000000000, quip: 'Worth more than its weight in gold — literally' },
+  { name: 'F-35A Lightning II', cost: 82500000, quip: 'Most expensive weapons program in human history' },
+  { name: 'Apache Helicopter', cost: 52000000, quip: 'Took your whole career for half of one' },
+  { name: 'MQ-9 Reaper Drone', cost: 32000000, quip: 'Piloted from a shipping container in Nevada' },
+  { name: 'Black Hawk Helicopter', cost: 21000000, quip: 'Costs more per hour than your salary' },
+  { name: 'M1 Abrams Tank', cost: 8000000, quip: 'Burns 3 gallons per mile of jet fuel' },
+  { name: 'Patriot PAC-3 Missile', cost: 4100000, quip: 'Shoots down things that cost less than it does' },
+  { name: 'Tomahawk Cruise Missile', cost: 1900000, quip: 'Flies 1,000 miles to deliver your tax dollars' },
+  { name: 'Stinger Missile', cost: 400000, quip: 'Point and shoot — like a very expensive camera' },
+  { name: 'Javelin Missile', cost: 240000, quip: 'Fire and forget — like Congress with your tax return' },
+  { name: 'Humvee', cost: 220000, quip: '4 MPG. Arnold Schwarzenegger has three.' },
+  { name: 'Air Force Coffee Maker', cost: 7600, quip: 'That\'s $317 per cup' },
+  { name: 'Military Toilet Seat', cost: 640, quip: 'The classic symbol of government waste' },
+  { name: 'Pentagon Hammer', cost: 435, quip: '$12 at Home Depot' },
+  { name: 'MRE (Beef Ravioli)', cost: 12.50, quip: 'You can barely taste your contribution' },
+  { name: '5.56 NATO Round', cost: 0.45, quip: 'Freedom, one bullet at a time' }
+];
+
+const CIVILIAN_COMPARISONS = [
+  { label: "teachers' yearly salaries", cost: 65000, note: 'Average US teacher salary' },
+  { label: 'four-year college tuitions', cost: 100000, note: 'Average 4-year public university' },
+  { label: "years of Americans' healthcare", cost: 15500, note: 'Per capita spending, 2024' },
+  { label: 'median US homes', cost: 420000, note: 'Median sale price, 2025' }
+];
+
+// ═══════════════════════════════════════
+// CALCULATION ENGINE
+// ═══════════════════════════════════════
+
+function calcFederalTax(salary, filingStatus) {
+  const data = TAX_DATA[filingStatus];
+  const taxable = Math.max(0, salary - data.deduction);
+  let tax = 0;
+  let prev = 0;
+  for (const [limit, rate] of data.brackets) {
+    if (taxable <= prev) break;
+    const chunk = Math.min(taxable, limit) - prev;
+    tax += chunk * rate;
+    prev = limit;
+  }
+  return tax;
+}
+
+function buildCart(budget) {
+  let remaining = budget;
+  const cart = [];
+  for (const item of MILITARY_ITEMS) {
+    if (item.cost <= remaining) {
+      const count = Math.floor(remaining / item.cost);
+      cart.push({ ...item, count });
+      remaining -= count * item.cost;
+    }
+  }
+  return { cart, remaining };
+}
+
+function findAspirationItem(budget) {
+  // Find cheapest item you can't fully afford (need at least 1 more of)
+  for (let i = MILITARY_ITEMS.length - 1; i >= 0; i--) {
+    const item = MILITARY_ITEMS[i];
+    if (item.cost > budget) {
+      return { item, pct: (budget / item.cost) * 100 };
+    }
+  }
+  // If they can afford everything, aspire to the most expensive
+  const top = MILITARY_ITEMS[0];
+  const count = Math.floor(budget / top.cost);
+  const remainder = budget - count * top.cost;
+  return { item: top, pct: (remainder / top.cost) * 100, note: `(you already bought ${count})` };
+}
+
+// ═══════════════════════════════════════
+// FORMATTING
+// ═══════════════════════════════════════
+
+function fmtMoney(n) {
+  if (n >= 1e9) return '$' + (n / 1e9).toFixed(1) + 'B';
+  if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return '$' + Math.round(n).toLocaleString();
+  return '$' + n.toFixed(2);
+}
+
+function fmtMoneyFull(n) {
+  return '$' + Math.round(n).toLocaleString();
+}
+
+function fmtCount(n) {
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return Math.round(n).toLocaleString();
+  return n.toString();
+}
+
+// ═══════════════════════════════════════
+// UI RENDERING
+// ═══════════════════════════════════════
+
+let currentState = {};
+
+function renderResults() {
+  const { salary, filing, years, rate } = currentState;
+  const annualTax = calcFederalTax(salary, filing);
+  const lifetimeTax = annualTax * years;
+  const defensePortion = lifetimeTax * rate;
+
+  // Summary
+  const grid = document.getElementById('summary-grid');
+  grid.innerHTML = `
+    <div class="summary-card">
+      <div class="label">Annual Federal Tax</div>
+      <div class="value">${fmtMoneyFull(annualTax)}</div>
+      <div class="note">Effective rate: ${salary > 0 ? ((annualTax / salary) * 100).toFixed(1) : '0.0'}%</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Lifetime Federal Tax (${years} yrs)</div>
+      <div class="value olive">${fmtMoneyFull(lifetimeTax)}</div>
+      <div class="note">${fmtMoneyFull(annualTax)} × ${years} years</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Your Defense Contribution (${Math.round(rate * 100)}%)</div>
+      <div class="value red">${fmtMoneyFull(defensePortion)}</div>
+      <div class="note">This is what "bought" your equipment below</div>
+    </div>
+  `;
+
+  // Shopping cart
+  const { cart, remaining } = buildCart(defensePortion);
+  const cartGrid = document.getElementById('cart-grid');
+  if (cart.length === 0 && defensePortion < 0.01) {
+    cartGrid.innerHTML = '<p style="color:var(--text-dim);grid-column:1/-1">Nothing. You contributed $0 to defense. Congratulations?</p>';
+  } else {
+    cartGrid.innerHTML = cart.map((item, i) => `
+      <div class="cart-item" style="animation-delay:${i * 0.06}s">
+        <div class="item-count">${fmtCount(item.count)}×</div>
+        <div class="item-name">${item.name}</div>
+        <div class="item-cost">${fmtMoney(item.cost)} each</div>
+        <div class="item-quip">"${item.quip}"</div>
+      </div>
+    `).join('');
+  }
+
+  // Progress bar of despair
+  const aspiration = findAspirationItem(defensePortion);
+  const pct = Math.min(aspiration.pct, 100);
+  document.getElementById('despair-sub').textContent =
+    `You're ${pct.toFixed(2)}% of the way to a ${aspiration.item.name}! ${aspiration.note || ''}`;
+
+  const fill = document.getElementById('progress-fill');
+  const label = document.getElementById('progress-label');
+  fill.style.width = '0';
+  label.textContent = `${pct.toFixed(2)}% — ${fmtMoney(aspiration.item.cost)}`;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      fill.style.width = pct + '%';
+    });
+  });
+
+  const quips = [
+    pct < 1 ? "Maybe in another lifetime. Or twelve." :
+    pct < 10 ? "You'll get there. Your great-great-grandchildren might see it." :
+    pct < 25 ? "A quarter of the way! Only three more careers to go." :
+    pct < 50 ? "Halfway! If you believe hard enough, and also double your salary." :
+    pct < 75 ? "So close, yet so far. Story of taxpaying life." :
+    pct < 100 ? "Almost! Just work a few more decades." :
+    "You actually funded one. How does it feel?"
+  ];
+  document.getElementById('despair-quip').textContent = quips[0];
+
+  // Receipt
+  renderReceipt(salary, filing, years, rate, annualTax, lifetimeTax, defensePortion, cart, remaining);
+
+  // Civilian comparison
+  const civGrid = document.getElementById('civilian-grid');
+  civGrid.innerHTML = CIVILIAN_COMPARISONS.map(c => {
+    const count = defensePortion / c.cost;
+    return `
+      <div class="civilian-item">
+        <div class="civ-count">${count >= 1 ? fmtCount(Math.floor(count)) : count.toFixed(2)}</div>
+        <div class="civ-label">${c.label}</div>
+        <div class="civ-note">${c.note}</div>
+      </div>
+    `;
+  }).join('');
+
+  // Update share text
+  currentState.defensePortion = defensePortion;
+  currentState.lifetimeTax = lifetimeTax;
+  currentState.cart = cart;
+  currentState.aspiration = aspiration;
+}
+
+function renderReceipt(salary, filing, years, rate, annualTax, lifetimeTax, defensePortion, cart, remaining) {
+  const filingLabels = {
+    single: 'Single',
+    married_joint: 'Married Filing Jointly',
+    married_separate: 'Married Filing Separately',
+    head_household: 'Head of Household'
+  };
+
+  const topItems = cart.slice(0, 8);
+  const itemLines = topItems.map(item =>
+    `<div class="receipt-line indent">
+      <span>${item.count}× ${item.name}</span>
+      <span>${fmtMoneyFull(item.count * item.cost)}</span>
+    </div>`
+  ).join('');
+
+  const moreCount = cart.length - topItems.length;
+  const moreNote = moreCount > 0 ? `<div class="receipt-line indent"><span>+ ${moreCount} more item types...</span><span></span></div>` : '';
+
+  document.getElementById('receipt').innerHTML = `
+    <div class="receipt-header">
+      <h3>DEPT. OF SATIRICAL REVENUE</h3>
+      <p>Transaction Receipt — Not Valid for Tax Purposes</p>
+    </div>
+    <div class="receipt-line"><span>TAXPAYER STATUS</span><span>${filingLabels[filing]}</span></div>
+    <div class="receipt-line"><span>ANNUAL SALARY</span><span>${fmtMoneyFull(salary)}</span></div>
+    <div class="receipt-line"><span>YEARS OF SERVICE</span><span>${years}</span></div>
+    <hr class="receipt-divider">
+    <div class="receipt-line"><span>ANNUAL FEDERAL TAX</span><span>${fmtMoneyFull(annualTax)}</span></div>
+    <div class="receipt-line subtotal"><span>LIFETIME FEDERAL TAX</span><span>${fmtMoneyFull(lifetimeTax)}</span></div>
+    <div class="receipt-line"><span>DEFENSE RATE APPLIED</span><span>${Math.round(rate * 100)}%</span></div>
+    <div class="receipt-line total"><span>YOUR DEFENSE BILL</span><span>${fmtMoneyFull(defensePortion)}</span></div>
+    <hr class="receipt-divider">
+    <div class="receipt-line"><span>ITEMS ACQUIRED:</span><span></span></div>
+    ${itemLines}
+    ${moreNote}
+    <div class="receipt-line indent"><span>Unspent change</span><span>${fmtMoney(remaining)}</span></div>
+    <div class="receipt-footer">
+      ★ THANK YOU FOR YOUR CONTRIBUTION ★<br>
+      NO REFUNDS • NO EXCHANGES • NO QUESTIONS
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════
+// EVENT HANDLERS
+// ═══════════════════════════════════════
+
+// Years slider
+const yearsSlider = document.getElementById('years');
+const yearsDisplay = document.getElementById('years-display');
+yearsSlider.addEventListener('input', () => {
+  yearsDisplay.textContent = yearsSlider.value;
+});
+
+// Calculate
+document.getElementById('calculate-btn').addEventListener('click', () => {
+  const salary = parseFloat(document.getElementById('salary').value) || 0;
+  const filing = document.getElementById('filing').value;
+  const years = parseInt(yearsSlider.value);
+
+  currentState = { salary, filing, years, rate: 0.25 };
+
+  // Reset active method button
+  document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.method-btn[data-rate="0.25"]').classList.add('active');
+
+  const results = document.getElementById('results');
+  results.classList.add('visible');
+  renderResults();
+
+  setTimeout(() => {
+    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+});
+
+// Method toggle
+document.getElementById('method-toggle').addEventListener('click', (e) => {
+  const btn = e.target.closest('.method-btn');
+  if (!btn) return;
+  document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentState.rate = parseFloat(btn.dataset.rate);
+  renderResults();
+});
+
+// Share
+document.getElementById('share-btn').addEventListener('click', () => {
+  const { salary, years, defensePortion, cart, aspiration } = currentState;
+  const topItem = cart.length > 0 ? cart[0] : null;
+
+  let text = `I worked ${years} years earning ${fmtMoneyFull(salary)}/yr.\n\n`;
+  text += `My federal taxes bought ${fmtMoneyFull(defensePortion)} in defense spending.\n\n`;
+  if (topItem) {
+    text += `That's ${fmtCount(topItem.count)}× ${topItem.name}`;
+    if (cart.length > 1) text += ` and ${cart.length - 1} other item types`;
+    text += '.\n\n';
+  }
+  text += `I'm ${aspiration.pct.toFixed(1)}% of the way to a ${aspiration.item.name}.\n\n`;
+  text += `Calculate yours → YOUR TAX DOLLARS AT WORK`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.getElementById('share-toast');
+    toast.classList.add('visible');
+    setTimeout(() => toast.classList.remove('visible'), 3000);
+  }).catch(() => {
+    // Fallback: select from a temp textarea
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const toast = document.getElementById('share-toast');
+    toast.classList.add('visible');
+    setTimeout(() => toast.classList.remove('visible'), 3000);
+  });
+});
+
+// Allow Enter key on salary input to trigger calculate
+document.getElementById('salary').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('calculate-btn').click();
+});
+
+// Sources overlay
+document.getElementById('open-sources').addEventListener('click', () => {
+  document.getElementById('sources-overlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+});
+
+document.getElementById('sources-close').addEventListener('click', () => {
+  document.getElementById('sources-overlay').classList.remove('visible');
+  document.body.style.overflow = '';
+});
+
+document.getElementById('sources-overlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) {
+    e.currentTarget.classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.getElementById('sources-overlay').classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+});
+</script>
+
+</body>
+</html>
